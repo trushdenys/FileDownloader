@@ -11,15 +11,20 @@ public class ImpParseMsgUtil implements ParseMsgUtil {
     private static final Logger logger = Logger.getLogger(getCurrentClassName());
 
     public void savefile(String fileName, InputStream is) throws IOException {
-            File f = new File(fileName);
-            FileOutputStream fos = new FileOutputStream(f);
+        File f = new File(fileName);
+        try (FileOutputStream fos = new FileOutputStream(f)) {
             byte[] buf = new byte[4096];
             int bytesRead;
             while ((bytesRead = is.read(buf)) != -1) {
                 fos.write(buf, 0, bytesRead);
+                fos.flush();
             }
-            fos.flush();
-            fos.close();
+        } catch (FileNotFoundException e) {
+            logger.error("Can't find the file " + fileName + ", exception: ", e);
+        } finally {
+            is.close();
+        }
+
     }
 
     public void moveFile(String destFrom, String destTo, String newFileName) {
