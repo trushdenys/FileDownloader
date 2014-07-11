@@ -26,8 +26,13 @@ public class PriceLoadDaoJdbc implements PriceLoadDao {
             }
         }
 
-        public PriceDownload selectById(int id) throws DBSystemException {
-            Connection conn = getConnection();
+        public PriceDownload selectById(int id) {
+            Connection conn = null;
+            try {
+                conn = getConnection();
+            } catch (DBSystemException e) {
+                logger.error("Can't get connection to DB, exception: ", e);
+            }
             PreparedStatement ps = null;
             ResultSet rs = null;
             PriceDownload priceDownload = null;
@@ -52,8 +57,13 @@ public class PriceLoadDaoJdbc implements PriceLoadDao {
             return priceDownload;
         }
 
-        public int selectCountTab() throws DBSystemException {
-            Connection conn = getConnection();
+        public int selectCountTab() {
+            Connection conn = null;
+            try {
+                conn = getConnection();
+            } catch (DBSystemException e) {
+                logger.error("Can't get connection to DB, exception: ", e);
+            }
             Statement statement = null;
             ResultSet rs = null;
             int count = 0;

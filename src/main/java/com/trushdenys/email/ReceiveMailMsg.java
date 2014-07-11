@@ -15,7 +15,7 @@ class ReceiveMailMsg {
 
     private static final Logger logger = Logger.getLogger(getCurrentClassName());
 
-    public void receiveMessage(PriceDownload priceDownload) throws IOException {
+    public void receiveMessage(PriceDownload priceDownload) {
         boolean hasAnAttach;
                 ConnectionToMail connectionToMail = new ConnectionToMail(priceDownload.getEmail(), priceDownload.getBoxname());
                 Message[] messagePool = connectionToMail.getMessagePool();
@@ -29,7 +29,7 @@ class ReceiveMailMsg {
             }
     }
 
-    boolean parsemessage(Message message, String path, String filename, String findname) throws IOException {
+    boolean parsemessage(Message message, String path, String filename, String findname) {
         boolean hasAnAttach = false;
         try {
             logger.info(MimeUtility.decodeText(String.valueOf("Message from: " + message.getFrom()[0]))
@@ -61,7 +61,9 @@ class ReceiveMailMsg {
         } catch (MessagingException e){
             logger.error("Unable to load bodystructure, exception: " + e);
         } catch (UnsupportedEncodingException e){
-            logger.error("Unsupported encoding, exception " + e);
+            logger.error("Unsupported encoding, exception: " + e);
+        } catch (IOException e) {
+            logger.error("Read message problems, exception: " + e);
         }
         if (!hasAnAttach) {
             logger.info("Message not contains an attachment files, go to next message");

@@ -12,7 +12,7 @@ class ReceiveFileUrl {
 
     private static final Logger logger = Logger.getLogger(getCurrentClassName());
 
-    public void receiveFiles(PriceDownload priceDownload) throws IOException {
+    public void receiveFiles(PriceDownload priceDownload) {
         try {
             URL connection = new URL(priceDownload.getEmail());
             HttpURLConnection urlconn;
@@ -32,19 +32,19 @@ class ReceiveFileUrl {
             writer.flush();
             writer.close();
             in.close();
-        } catch (IOException e) {
-            logger.error("Can't download file from " + priceDownload.getEmail() + ", exception: ", e);
-        }
-        ParseMsgUtil pMu = new ImpParseMsgUtil();
+            ParseMsgUtil pMu = new ImpParseMsgUtil();
 
-        if(pMu.equalsFiles(priceDownload.getPath() + priceDownload.getFilename(),
-                LoadProperties.loadProperties().getProperty("PATH") + priceDownload.getFilename())) {
-            logger.info("Files " + priceDownload.getPath() + priceDownload.getFilename() + " and "
-                    + LoadProperties.loadProperties().getProperty("PATH") + priceDownload.getFilename() + " are identical" );
-            pMu.deleteTheFile(LoadProperties.loadProperties().getProperty("PATH") + priceDownload.getFilename());
-        } else {
+            if (pMu.equalsFiles(priceDownload.getPath() + priceDownload.getFilename(),
+                    LoadProperties.loadProperties().getProperty("PATH") + priceDownload.getFilename())) {
+                logger.info("Files " + priceDownload.getPath() + priceDownload.getFilename() + " and "
+                        + LoadProperties.loadProperties().getProperty("PATH") + priceDownload.getFilename() + " are identical");
+                pMu.deleteTheFile(LoadProperties.loadProperties().getProperty("PATH") + priceDownload.getFilename());
+            } else {
                 pMu.moveFile(LoadProperties.loadProperties().getProperty("PATH") + priceDownload.getFilename(),
                         priceDownload.getPath(), priceDownload.getFilename());
+            }
+        } catch (IOException e) {
+            logger.error("Can't download file from " + priceDownload.getEmail() + ", exception: ", e);
         }
     }
 }

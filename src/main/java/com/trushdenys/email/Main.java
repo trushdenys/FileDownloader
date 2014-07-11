@@ -15,7 +15,7 @@ public class Main {
 
     private static final Logger logger = Logger.getLogger(getCurrentClassName());
 
-    public static void main(String[] args) throws DBSystemException, IOException, MessagingException {
+    public static void main(String[] args) {
 
         PriceLoadDao priceLoadDao = new PriceLoadDaoJdbc();
         PriceDownload priceDownload;
